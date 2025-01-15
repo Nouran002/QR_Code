@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء QR Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <style>
+        #qrcode {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #qrLink {
+            margin-top: 10px;
+            display: block;
+            text-align: center;
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>إنشاء QR Code من رابط وهمي ورابط فعلي</h2>
+    
+    <form id="linkForm">
+        <label for="fakeLinkInput">الرابط الوهمي:</label>
+        <input type="url" id="fakeLinkInput" placeholder="أدخل الرابط الوهمي" required>
+        
+        <label for="actualLinkInput">الرابط الفعلي:</label>
+        <input type="url" id="actualLinkInput" placeholder="أدخل الرابط الفعلي" required>
+
+        <button type="submit">إنشاء QR Code</button>
+    </form>
+
+    <div id="qrcode"></div>
+    <a id="qrLink" href="#" target="_blank" style="display:none;"></a>
+
+    <script>
+        document.getElementById("linkForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            // Get the fake and actual links
+            const fakeLink = document.getElementById("fakeLinkInput").value;
+            const actualLink = document.getElementById("actualLinkInput").value;
+
+            // Encode the middle page URL with both links
+            const middlePageUrl = `https://www.middlepage.com?fake=${encodeURIComponent(fakeLink)}&redirect=${encodeURIComponent(actualLink)}`;
+
+            // Generate the QR code with the middle page URL
+            const qrElement = document.getElementById("qrcode");
+            qrElement.innerHTML = ""; // Clear previous QR Code
+            QRCode.toDataURL(middlePageUrl, { errorCorrectionLevel: 'H' }, function (error, url) {
+                if (error) {
+                    console.error(error);
+                    return;
+                }
+
+                // Create and display the QR Code image
+                const img = new Image();
+                img.src = url;
+                img.alt = "QR Code";
+                img.style.cursor = "pointer"; // Pointer cursor on hover
+                qrElement.appendChild(img);
+
+                // Display the fake link
+                const qrLink = document.getElementById("qrLink");
+                qrLink.href = middlePageUrl;  // Link to the middle page
+                qrLink.innerHTML = fakeLink;  // Display the fake link
+                qrLink.style.display = "inline-block"; // Show the link
+            });
+        });
+    </script>
+
+</body>
+</html>

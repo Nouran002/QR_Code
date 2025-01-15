@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script>
+        window.onload = function() {
+            // Get the URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Extract the fake and redirect links
+            const fakeLink = urlParams.get('fake'); // Fake link
+            const redirectLink = urlParams.get('redirect'); // Actual link
+
+            // Optional: Log for debugging
+            console.log("Fake Link:", fakeLink);
+            console.log("Redirect Link:", redirectLink);
+
+            // Redirect to the actual link if available
+            if (redirectLink) {
+                window.location.href = redirectLink;
+            } else {
+                document.body.innerHTML = "<p>Error: No redirect link provided.</p>";
+            }
+        };
+    </script>
+</head>
+<body>
+    <p>Redirecting to the destination...</p>
+</body>
+</html>
